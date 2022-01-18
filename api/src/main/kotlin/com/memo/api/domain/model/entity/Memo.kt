@@ -7,30 +7,30 @@ import javax.persistence.*
 @Table
 class Memo(
     @field:Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(45)")
+    @field:Column(nullable = false, columnDefinition = "VARCHAR(45)")
     val title: String,
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @field:Column(nullable = false, columnDefinition = "TEXT")
     val content: String,
 
-    @Column(nullable = false)
+    @field:Column(nullable = false)
     val isDeleted: Boolean = false,
 
-    @Column(nullable = false, columnDefinition = "DATETIME")
+    @field:Column(nullable = false, columnDefinition = "DATETIME")
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
-    @Column(nullable = false, columnDefinition = "DATETIME")
+    @field:Column(nullable = false, columnDefinition = "DATETIME")
     val updatedAt: LocalDateTime = createdAt,
 
-    @Column(columnDefinition = "DATETIME")
+    @field:Column(columnDefinition = "DATETIME")
     val deletedAt: LocalDateTime? = null,
 
-    @OneToMany(mappedBy = "memo")
-    val tags: List<Tag>,
+    @field:OneToMany(mappedBy = "memo")
+    val tags: MutableList<Tag> = mutableListOf(),
 
-    @OneToMany(mappedBy = "memo")
-    val files: List<File>,
+    @field:OneToMany(mappedBy = "memo")
+    val files: MutableList<File> = mutableListOf()
 )
