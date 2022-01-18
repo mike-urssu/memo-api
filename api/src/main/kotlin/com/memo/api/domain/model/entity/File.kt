@@ -6,16 +6,16 @@ import javax.persistence.*
 @Table
 class File(
     @field:Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @field:ManyToOne(fetch = FetchType.LAZY)
+    @field:JoinColumn(nullable = false)
     val memo: Memo,
 
-    @Column(nullable = false, length = 256)
+    @field:Column(nullable = false, length = 256)
     val fileName: String,
 
-    @Column(nullable = false, length = 256)
+    @field:Column(nullable = false, length = 256)
     val displayedName: String
 )

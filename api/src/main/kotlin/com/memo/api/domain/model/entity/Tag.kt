@@ -6,13 +6,13 @@ import javax.persistence.*
 @Table
 class Tag(
     @field:Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @field:ManyToOne(fetch = FetchType.LAZY)
+    @field:JoinColumn(nullable = false)
     val memo: Memo,
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(45)")
+    @field:Column(nullable = false, columnDefinition = "VARCHAR(45)")
     val content: String
 )
