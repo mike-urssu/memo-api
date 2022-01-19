@@ -16,6 +16,6 @@ class File(
     @field:Column(nullable = false, length = 256)
     val fileName: String,
 
-    @field:Column(nullable = false, length = 256
-    val displayedName: String
+    @field:Column(nullable = false, length = 256)
+    val savedName: String
 )

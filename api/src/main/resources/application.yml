@@ -9,14 +9,15 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DATABASE_ADDRESS}/${DATABASE_NAME}?serverTimezone=UTC
+    url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
+    generate-ddl: true
     show-sql: true
     properties:
       hibernate:
@@ -31,3 +32,6 @@ logging:
           descriptor:
             sql:
               BasicBinder: trace
+
+application:
+  upload-path: ${UPLOAD_PATH}
