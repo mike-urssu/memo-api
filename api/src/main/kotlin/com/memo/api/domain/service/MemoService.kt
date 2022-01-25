@@ -24,7 +24,7 @@ class MemoService(
                 content = createMemoRequest.content
             )
         )
-        tagService.createTags(memo, createMemoRequest.tags)
-        fileService.createFiles(memo, createMemoRequest.files)
+//        tagService.createTags(memo, createMemoRequest.tags)
+//        fileService.createFiles(memo, createMemoRequest.files)
     }
 }
