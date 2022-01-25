@@ -14,7 +14,7 @@ class MemoController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createMemo(
-        @RequestBody @Valid createMemoRequest: CreateMemoRequest
+        @ModelAttribute @Valid createMemoRequest: CreateMemoRequest,
     ) {
         memoService.createMemo(createMemoRequest)
     }

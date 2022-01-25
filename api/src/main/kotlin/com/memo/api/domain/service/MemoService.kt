@@ -3,7 +3,6 @@ package com.memo.api.domain.service
 import com.memo.api.application.request.CreateMemoRequest
 import com.memo.api.domain.model.entity.Memo
 import com.memo.api.domain.model.repository.MemoRepository
-import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -13,8 +12,6 @@ class MemoService(
     private val fileService: FileService,
     private val memoRepository: MemoRepository
 ) {
-    private val log = KotlinLogging.logger {}
-
     @Transactional
     fun createMemo(createMemoRequest: CreateMemoRequest) {
         val memo = memoRepository.save(
@@ -24,7 +21,7 @@ class MemoService(
                 content = createMemoRequest.content
             )
         )
-//        tagService.createTags(memo, createMemoRequest.tags)
-//        fileService.createFiles(memo, createMemoRequest.files)
+        tagService.createTags(memo, createMemoRequest.tags)
+        fileService.createFiles(memo, createMemoRequest.files)
     }
 }

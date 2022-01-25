@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
+import javax.transaction.Transactional
 
 @Service
 class FileService(
@@ -16,6 +17,7 @@ class FileService(
     @Value("\${application.upload-path}")
     lateinit var uploadPath: String
 
+    @Transactional
     fun createFiles(memo: Memo, filesFromRequest: List<MultipartFile>?) {
         if (filesFromRequest.isNullOrEmpty())
             return
