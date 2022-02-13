@@ -1,6 +1,7 @@
 package com.memo.api.application.controller
 
 import com.memo.api.application.request.CreateMemoRequest
+import com.memo.api.application.response.GetMemosResponse
 import com.memo.api.domain.service.MemoService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -14,8 +15,10 @@ class MemoController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createMemo(
-        @ModelAttribute @Valid createMemoRequest: CreateMemoRequest,
-    ) {
-        memoService.createMemo(createMemoRequest)
-    }
+        @ModelAttribute @Valid createMemoRequest: CreateMemoRequest
+    ) = memoService.createMemo(createMemoRequest)
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    fun getMemos() = GetMemosResponse(memoService.getMemos())
 }

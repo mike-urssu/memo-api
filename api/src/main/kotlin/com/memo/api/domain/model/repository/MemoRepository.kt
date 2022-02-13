@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface MemoRepository : JpaRepository<Memo, Int>
+interface MemoRepository : JpaRepository<Memo, Int> {
+    fun findAllByIsDeletedIsFalse(): List<Memo>
+}
