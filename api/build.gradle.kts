@@ -28,7 +28,7 @@ dependencies {
 
     implementation("io.github.microutils:kotlin-logging:2.1.21")
     implementation("commons-io:commons-io:2.11.0")
-    implementation ("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 }
 
 tasks.withType<KotlinCompile> {
