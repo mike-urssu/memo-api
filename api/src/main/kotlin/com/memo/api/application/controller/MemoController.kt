@@ -9,7 +9,7 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/v1/memos")
 class MemoController(
-    private val memoService: MemoService,
+    private val memoService: MemoService
 ) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
