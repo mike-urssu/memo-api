@@ -18,24 +18,23 @@ class FileService(
     lateinit var uploadPath: String
 
     @Transactional
-    fun createFiles(memo: Memo, filesFromRequest: List<MultipartFile>?) {
-        if (filesFromRequest.isNullOrEmpty())
-            return
-
+    fun createFiles(memo: Memo, filesFromRequest: List<MultipartFile>) {
         val files = mutableListOf<File>()
         for (fileFromRequest in filesFromRequest) {
-            val fileName = fileFromRequest.originalFilename!!
-            val savedName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(fileName)
-            val file = File(
-                id = null,
-                memo = memo,
-                fileName = fileName,
-                savedName = savedName
-            )
-            files.add(file)
-            memo.files.add(file)
+            if (!fileFromRequest.isEmpty) {
+                val fileName = fileFromRequest.originalFilename!!
+                val savedName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(fileName)
+                val file = File(
+                    id = null,
+                    memo = memo,
+                    fileName = fileName,
+                    savedName = savedName
+                )
+                files.add(file)
+                memo.files.add(file)
 
-            fileFromRequest.transferTo(java.io.File(java.io.File(uploadPath).absolutePath, savedName))
+                fileFromRequest.transferTo(java.io.File(java.io.File(uploadPath).absolutePath, savedName))
+            }
         }
         fileRepository.saveAll(files)
     }
