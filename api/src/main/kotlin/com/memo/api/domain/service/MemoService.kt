@@ -3,16 +3,22 @@ package com.memo.api.domain.service
 import com.memo.api.application.request.CreateMemoRequest
 import com.memo.api.domain.model.dto.GetMemosDto
 import com.memo.api.domain.model.entity.Memo
+import com.memo.api.domain.model.repository.FileRepository
 import com.memo.api.domain.model.repository.MemoRepository
+import com.memo.api.domain.model.repository.TagRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.stream.Collectors
 
 @Service
 class MemoService(
     private val tagService: TagService,
     private val fileService: FileService,
-    private val memoRepository: MemoRepository
+
+    private val memoRepository: MemoRepository,
+    private val tagRepository: TagRepository,
+    private val fileRepository: FileRepository
 ) {
     @Transactional
     fun createMemo(createMemoRequest: CreateMemoRequest) {
@@ -28,8 +34,20 @@ class MemoService(
     }
 
     @Transactional(readOnly = true)
-    fun getMemos(): List<GetMemosDto> = memoRepository.findAllByIsDeletedIsFalse()
-        .stream().map { memo ->
-            GetMemosDto(memo)
-        }.collect(Collectors.toList())
+    fun getMemos(pageable: PageRequest, title: String?, content: String?): Page<GetMemosDto> {
+        val memos =
+            if (!title.isNullOrEmpty() && !content.isNullOrEmpty())
+                memoRepository.findAllByIsDeletedIsFalseAndTitleContainingOrContentContaining(title, content, pageable)
+            else if (!title.isNullOrEmpty())
+                memoRepository.findAllByIsDeletedIsFalseAndTitleContaining(title, pageable)
+            else if (!content.isNullOrEmpty())
+                memoRepository.findAllByIsDeletedIsFalseAndContentContaining(content, pageable)
+            else
+                memoRepository.findAllByIsDeletedIsFalse(pageable)
+        return memos.map { memo ->
+            val tagSize = tagRepository.countByMemo(memo)
+            val fileSize = fileRepository.countByMemo(memo)
+            GetMemosDto(memo, tagSize, fileSize)
+        }
+    }
 }

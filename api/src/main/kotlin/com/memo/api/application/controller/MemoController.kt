@@ -2,7 +2,9 @@ package com.memo.api.application.controller
 
 import com.memo.api.application.request.CreateMemoRequest
 import com.memo.api.application.response.GetMemosResponse
+import com.memo.api.domain.model.enums.SortBy
 import com.memo.api.domain.service.MemoService
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -20,5 +22,15 @@ class MemoController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun getMemos() = GetMemosResponse(memoService.getMemos())
+    fun getMemos(
+        @RequestParam(required = false, defaultValue = "BASIC") sortBy: SortBy,
+        @RequestParam(required = false, defaultValue = "0") page: Int,
+        @RequestParam(required = false, defaultValue = "10") size: Int,
+        @RequestParam(required = false) title: String?,
+        @RequestParam(required = false) content: String?
+    ): GetMemosResponse {
+        val pageable = PageRequest.of(page, size, sortBy.sort)
+        val memos = memoService.getMemos(pageable, title, content)
+        return GetMemosResponse(memos)
+    }
 }
