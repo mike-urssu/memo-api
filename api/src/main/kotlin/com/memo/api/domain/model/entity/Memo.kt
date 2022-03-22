@@ -32,5 +32,5 @@ class Memo(
     val tags: MutableList<Tag> = mutableListOf(),
 
     @field:OneToMany(mappedBy = "memo")
-    val files: MutableList<File> = mutableListOf()
+    val images: MutableList<Image> = mutableListOf()
 )

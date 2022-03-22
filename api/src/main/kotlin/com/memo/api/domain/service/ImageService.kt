@@ -1,18 +1,20 @@
 package com.memo.api.domain.service
 
-import com.memo.api.domain.model.entity.File
+import com.memo.api.domain.model.entity.Image
 import com.memo.api.domain.model.entity.Memo
-import com.memo.api.domain.model.repository.FileRepository
+import com.memo.api.domain.model.repository.ImageRepository
 import org.apache.commons.io.FilenameUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
+import java.io.File
 import java.util.*
+import java.util.stream.Collectors
 import javax.transaction.Transactional
 
 @Service
-class FileService(
-    private val fileRepository: FileRepository
+class ImageService(
+    private val imageRepository: ImageRepository
 ) {
     @Value("\${application.upload-path}")
     lateinit var uploadPath: String

@@ -4,7 +4,7 @@ import javax.persistence.*
 
 @Entity
 @Table
-class File(
+class Image(
     @field:Id
     @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,

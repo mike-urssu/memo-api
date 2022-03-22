@@ -3,7 +3,7 @@ package com.memo.api.domain.service
 import com.memo.api.application.request.CreateMemoRequest
 import com.memo.api.domain.model.dto.GetMemosDto
 import com.memo.api.domain.model.entity.Memo
-import com.memo.api.domain.model.repository.FileRepository
+import com.memo.api.domain.model.repository.ImageRepository
 import com.memo.api.domain.model.repository.MemoRepository
 import com.memo.api.domain.model.repository.TagRepository
 import org.springframework.data.domain.Page
@@ -14,11 +14,11 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class MemoService(
     private val tagService: TagService,
-    private val fileService: FileService,
+    private val imageService: ImageService,
 
     private val memoRepository: MemoRepository,
     private val tagRepository: TagRepository,
-    private val fileRepository: FileRepository
+    private val imageRepository: ImageRepository
 ) {
     @Transactional
     fun createMemo(createMemoRequest: CreateMemoRequest) {
@@ -30,7 +30,7 @@ class MemoService(
             )
         )
         tagService.createTags(memo, createMemoRequest.tags)
-        fileService.createFiles(memo, createMemoRequest.files)
+        imageService.createImages(memo, createMemoRequest.images)
     }
 
     @Transactional(readOnly = true)
@@ -46,7 +46,7 @@ class MemoService(
                 memoRepository.findAllByIsDeletedIsFalse(pageable)
         return memos.map { memo ->
             val tagSize = tagRepository.countByMemo(memo)
-            val fileSize = fileRepository.countByMemo(memo)
+            val fileSize = imageRepository.countByMemo(memo)
             GetMemosDto(memo, tagSize, fileSize)
         }
     }

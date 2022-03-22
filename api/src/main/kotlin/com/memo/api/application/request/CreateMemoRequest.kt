@@ -15,6 +15,6 @@ data class CreateMemoRequest(
     @field:Size(max = 3, message = "Up to 3 tags can be registered.")
     val tags: List<String>,
 
-    @field:Size(max = 3, message = "Up to 3 files can be registered.")
-    val files: List<MultipartFile>
+    @field:Size(max = 3, message = "Up to 3 images can be registered.")
+    val images: List<MultipartFile>
 )
