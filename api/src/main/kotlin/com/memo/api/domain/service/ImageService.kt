@@ -20,24 +20,17 @@ class ImageService(
     lateinit var uploadPath: String
 
     @Transactional
-    fun createFiles(memo: Memo, filesFromRequest: List<MultipartFile>) {
-        val files = mutableListOf<File>()
-        for (fileFromRequest in filesFromRequest) {
-            if (!fileFromRequest.isEmpty) {
-                val fileName = fileFromRequest.originalFilename!!
+    fun createImages(memo: Memo, imagesFromRequest: List<MultipartFile>) {
+        val images = imagesFromRequest.stream()
+            .filter { !it.isEmpty }
+            .map {
+                val fileName = it.originalFilename!!
                 val savedName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(fileName)
-                val file = File(
-                    id = null,
-                    memo = memo,
-                    fileName = fileName,
-                    savedName = savedName
-                )
-                files.add(file)
-                memo.files.add(file)
-
-                fileFromRequest.transferTo(java.io.File(java.io.File(uploadPath).absolutePath, savedName))
-            }
-        }
-        fileRepository.saveAll(files)
+                val image = Image(memo = memo, fileName = fileName, savedName = savedName)
+                memo.images.add(image)
+                it.transferTo(File(File(uploadPath).absolutePath, savedName))
+                image
+            }.collect(Collectors.toList())
+        imageRepository.saveAll(images)
     }
 }

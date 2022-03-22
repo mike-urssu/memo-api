@@ -22,13 +22,7 @@ class MemoService(
 ) {
     @Transactional
     fun createMemo(createMemoRequest: CreateMemoRequest) {
-        val memo = memoRepository.save(
-            Memo(
-                id = null,
-                title = createMemoRequest.title,
-                content = createMemoRequest.content
-            )
-        )
+        val memo = memoRepository.save(Memo(title = createMemoRequest.title, content = createMemoRequest.content))
         tagService.createTags(memo, createMemoRequest.tags)
         imageService.createImages(memo, createMemoRequest.images)
     }

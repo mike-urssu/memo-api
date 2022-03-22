@@ -4,6 +4,7 @@ import com.memo.api.domain.model.entity.Memo
 import com.memo.api.domain.model.entity.Tag
 import com.memo.api.domain.model.repository.TagRepository
 import org.springframework.stereotype.Service
+import java.util.stream.Collectors
 import javax.transaction.Transactional
 
 @Service
@@ -12,16 +13,12 @@ class TagService(
 ) {
     @Transactional
     fun createTags(memo: Memo, tagsFromRequest: List<String>) {
-        val tags = mutableListOf<Tag>()
-        for (tagInRequest in tagsFromRequest) {
-            val tag = Tag(
-                id = null,
-                memo = memo,
-                content = tagInRequest
-            )
-            tags.add(tag)
-            memo.tags.add(tag)
-        }
+        val tags = tagsFromRequest.stream()
+            .map { content ->
+                val tag = Tag(memo = memo, content = content)
+                memo.tags.add(tag)
+                tag
+            }.collect(Collectors.toList())
         tagRepository.saveAll(tags)
     }
 }
