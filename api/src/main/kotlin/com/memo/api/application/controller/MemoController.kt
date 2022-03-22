@@ -1,6 +1,7 @@
 package com.memo.api.application.controller
 
 import com.memo.api.application.request.CreateMemoRequest
+import com.memo.api.application.response.GetMemoResponse
 import com.memo.api.application.response.GetMemosResponse
 import com.memo.api.domain.service.MemoService
 import org.springframework.data.domain.PageRequest
@@ -31,4 +32,10 @@ class MemoController(
         val memos = memoService.getMemos(pageable, title, content)
         return GetMemosResponse(memos)
     }
+
+    @GetMapping("/{memoId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun getMemo(
+        @PathVariable memoId: Int
+    ) = GetMemoResponse(memoService.getMemo(memoId))
 }
