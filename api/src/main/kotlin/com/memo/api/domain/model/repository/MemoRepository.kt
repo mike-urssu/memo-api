@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
+import java.util.Optional
 
 @Repository
 interface MemoRepository : JpaRepository<Memo, Int> {
@@ -19,4 +20,6 @@ interface MemoRepository : JpaRepository<Memo, Int> {
     fun findAllByIsDeletedIsFalseAndTitleContaining(title: String, pageable: Pageable): Page<Memo>
 
     fun findAllByIsDeletedIsFalseAndContentContaining(content: String, pageable: Pageable): Page<Memo>
+
+    fun findByIdAndIsDeletedIsFalse(memoId: Int): Optional<Memo>
 }

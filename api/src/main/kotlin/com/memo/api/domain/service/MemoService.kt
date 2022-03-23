@@ -1,7 +1,11 @@
 package com.memo.api.domain.service
 
 import com.memo.api.application.request.CreateMemoRequest
+import com.memo.api.domain.exception.MemoNotFoundException
+import com.memo.api.domain.model.dto.GetImagesDto
+import com.memo.api.domain.model.dto.GetMemoDto
 import com.memo.api.domain.model.dto.GetMemosDto
+import com.memo.api.domain.model.dto.GetTagsDto
 import com.memo.api.domain.model.entity.Memo
 import com.memo.api.domain.model.repository.ImageRepository
 import com.memo.api.domain.model.repository.MemoRepository
@@ -10,6 +14,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.stream.Collectors
 
 @Service
 class MemoService(
@@ -43,5 +48,22 @@ class MemoService(
             val fileSize = imageRepository.countByMemo(memo)
             GetMemosDto(memo, tagSize, fileSize)
         }
+    }
+
+    @Transactional(readOnly = true)
+    fun getMemo(memoId: Int): GetMemoDto {
+        val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
+
+        val tags = memo.tags.stream()
+            .map {
+                GetTagsDto(it)
+            }.collect(Collectors.toList())
+
+        val images = memo.images.stream()
+            .map {
+                GetImagesDto(it)
+            }.collect(Collectors.toList())
+
+        return GetMemoDto(memo, tags, images)
     }
 }
