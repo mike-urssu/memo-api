@@ -21,4 +21,10 @@ class TagService(
             }.collect(Collectors.toList())
         tagRepository.saveAll(tags)
     }
+
+    @Transactional
+    fun updateTags(memo: Memo, tagsFromRequest: List<String>) {
+        tagRepository.deleteAllInBatch(memo.tags)
+        createTags(memo, tagsFromRequest)
+    }
 }

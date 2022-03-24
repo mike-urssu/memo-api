@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.Size
 
-data class CreateMemoRequest(
+data class UpdateMemoRequest(
     @field:NotEmpty(message = "Title must not be empty.")
     @field:Size(max = 45, message = "Title must not exceed 45 characters.")
     val title: String,

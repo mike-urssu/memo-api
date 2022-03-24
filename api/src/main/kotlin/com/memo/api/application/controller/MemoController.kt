@@ -1,6 +1,6 @@
 package com.memo.api.application.controller
 
-import com.memo.api.application.request.CreateMemoRequest
+import com.memo.api.application.request.CreateOrUpdateMemoRequest
 import com.memo.api.application.response.GetMemoResponse
 import com.memo.api.application.response.GetMemosResponse
 import com.memo.api.domain.service.MemoService
@@ -17,7 +17,7 @@ class MemoController(
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createMemo(
-        @ModelAttribute @Valid createMemoRequest: CreateMemoRequest
+        @ModelAttribute @Valid createMemoRequest: CreateOrUpdateMemoRequest
     ) = memoService.createMemo(createMemoRequest)
 
     @GetMapping
@@ -38,4 +38,11 @@ class MemoController(
     fun getMemo(
         @PathVariable memoId: Int
     ) = GetMemoResponse(memoService.getMemo(memoId))
+
+    @PutMapping("/{memoId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun updateMemo(
+        @PathVariable memoId: Int,
+        @Valid @ModelAttribute updateMemoRequest: CreateOrUpdateMemoRequest
+    ) = memoService.updateMemo(memoId, updateMemoRequest)
 }

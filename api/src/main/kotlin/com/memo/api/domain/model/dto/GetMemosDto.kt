@@ -5,7 +5,7 @@ import com.memo.api.domain.model.entity.Memo
 class GetMemosDto(
     memo: Memo,
     val tagSize: Int,
-    val fileSize: Int
+    val imageSize: Int
 ) {
     val id = memo.id!!
     val title = memo.title
