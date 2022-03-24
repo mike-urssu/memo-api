@@ -23,7 +23,10 @@ class TagService(
     }
 
     @Transactional
-    fun updateTags(memo: Memo, tagsFromRequest: List<String>) {
+    fun updateTags(memo: Memo, tagsFromRequest: List<String>?) {
+        if (tagsFromRequest == null)
+            return
+
         tagRepository.deleteAllInBatch(memo.tags)
         createTags(memo, tagsFromRequest)
     }

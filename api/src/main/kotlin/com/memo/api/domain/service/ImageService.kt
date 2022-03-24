@@ -35,7 +35,10 @@ class ImageService(
     }
 
     @Transactional
-    fun updateImages(memo: Memo, imagesFromRequest: List<MultipartFile>) {
+    fun updateImages(memo: Memo, imagesFromRequest: List<MultipartFile>?) {
+        if (imagesFromRequest.isNullOrEmpty())
+            return
+
         imageRepository.deleteAllInBatch(memo.images)
         createImages(memo, imagesFromRequest)
     }

@@ -1,12 +1,14 @@
 package com.memo.api.domain.service
 
 import com.memo.api.application.request.CreateOrUpdateMemoRequest
+import com.memo.api.application.request.PartialUpdateMemoRequest
 import com.memo.api.domain.exception.MemoNotFoundException
 import com.memo.api.domain.model.dto.GetImagesDto
 import com.memo.api.domain.model.dto.GetMemoDto
 import com.memo.api.domain.model.dto.GetMemosDto
 import com.memo.api.domain.model.dto.GetTagsDto
 import com.memo.api.domain.model.entity.Memo
+import com.memo.api.domain.model.mapper.PartiallyUpdateMemoMapper
 import com.memo.api.domain.model.repository.ImageRepository
 import com.memo.api.domain.model.repository.MemoRepository
 import com.memo.api.domain.model.repository.TagRepository
@@ -23,7 +25,9 @@ class MemoService(
 
     private val memoRepository: MemoRepository,
     private val tagRepository: TagRepository,
-    private val imageRepository: ImageRepository
+    private val imageRepository: ImageRepository,
+
+    private val updateMemoMapper: PartiallyUpdateMemoMapper
 ) {
     @Transactional
     fun createMemo(createMemoRequest: CreateOrUpdateMemoRequest) {
@@ -73,5 +77,13 @@ class MemoService(
         memo.updateMemo(updateMemoRequest)
         tagService.updateTags(memo, updateMemoRequest.tags)
         imageService.updateImages(memo, updateMemoRequest.images)
+    }
+
+    @Transactional
+    fun partiallyUpdateMemo(memoId: Int, partialUpdateMemoRequest: PartialUpdateMemoRequest) {
+        val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
+        updateMemoMapper.updateMemo(partialUpdateMemoRequest, memo)
+        tagService.updateTags(memo, partialUpdateMemoRequest.tags)
+        imageService.updateImages(memo, partialUpdateMemoRequest.images)
     }
 }

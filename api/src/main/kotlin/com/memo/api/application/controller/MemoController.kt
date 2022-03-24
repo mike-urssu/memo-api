@@ -1,6 +1,7 @@
 package com.memo.api.application.controller
 
 import com.memo.api.application.request.CreateOrUpdateMemoRequest
+import com.memo.api.application.request.PartialUpdateMemoRequest
 import com.memo.api.application.response.GetMemoResponse
 import com.memo.api.application.response.GetMemosResponse
 import com.memo.api.domain.service.MemoService
@@ -45,4 +46,11 @@ class MemoController(
         @PathVariable memoId: Int,
         @Valid @ModelAttribute updateMemoRequest: CreateOrUpdateMemoRequest
     ) = memoService.updateMemo(memoId, updateMemoRequest)
+
+    @PatchMapping("/{memoId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun partialUpdateMemo(
+        @PathVariable memoId: Int,
+        @Valid @ModelAttribute partialUpdateMemoRequest: PartialUpdateMemoRequest
+    ) = memoService.partiallyUpdateMemo(memoId, partialUpdateMemoRequest)
 }
