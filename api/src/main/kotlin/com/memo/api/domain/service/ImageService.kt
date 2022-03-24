@@ -33,4 +33,18 @@ class ImageService(
             }.collect(Collectors.toList())
         imageRepository.saveAll(images)
     }
+
+    @Transactional
+    fun updateImages(memo: Memo, imagesFromRequest: List<MultipartFile>?) {
+        if (imagesFromRequest.isNullOrEmpty())
+            return
+
+        deleteImages(memo.images)
+        createImages(memo, imagesFromRequest)
+    }
+
+    private fun deleteImages(images: List<Image>) {
+        images.stream().forEach { File(uploadPath, it.savedName).delete() }
+        imageRepository.deleteAllInBatch(images)
+    }
 }

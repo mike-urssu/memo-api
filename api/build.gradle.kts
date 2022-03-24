@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.spring") version "1.6.10"
     kotlin("plugin.jpa") version "1.6.10"
+    kotlin("kapt") version "1.6.10"
 }
 
 group = "com.memo"
@@ -29,6 +30,9 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:2.1.21")
     implementation("commons-io:commons-io:2.11.0")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    implementation("org.mapstruct:mapstruct:1.4.2.Final")
+    kapt("org.mapstruct:mapstruct-processor:1.4.2.Final")
 }
 
 tasks.withType<KotlinCompile> {
