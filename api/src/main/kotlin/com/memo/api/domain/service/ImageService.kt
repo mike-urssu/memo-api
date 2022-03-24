@@ -39,7 +39,12 @@ class ImageService(
         if (imagesFromRequest.isNullOrEmpty())
             return
 
-        imageRepository.deleteAllInBatch(memo.images)
+        deleteImages(memo.images)
         createImages(memo, imagesFromRequest)
+    }
+
+    private fun deleteImages(images: List<Image>) {
+        images.stream().forEach { File(uploadPath, it.savedName).delete() }
+        imageRepository.deleteAllInBatch(images)
     }
 }

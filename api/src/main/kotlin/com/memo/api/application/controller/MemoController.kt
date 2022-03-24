@@ -52,5 +52,5 @@ class MemoController(
     fun partialUpdateMemo(
         @PathVariable memoId: Int,
         @Valid @ModelAttribute partialUpdateMemoRequest: PartialUpdateMemoRequest
-    ) = memoService.partiallyUpdateMemo(memoId, partialUpdateMemoRequest)
+    ) = memoService.updateMemoPartially(memoId, partialUpdateMemoRequest)
 }

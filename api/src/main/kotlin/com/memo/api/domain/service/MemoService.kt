@@ -80,7 +80,7 @@ class MemoService(
     }
 
     @Transactional
-    fun partiallyUpdateMemo(memoId: Int, partialUpdateMemoRequest: PartialUpdateMemoRequest) {
+    fun updateMemoPartially(memoId: Int, partialUpdateMemoRequest: PartialUpdateMemoRequest) {
         val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
         updateMemoMapper.updateMemo(partialUpdateMemoRequest, memo)
         tagService.updateTags(memo, partialUpdateMemoRequest.tags)
