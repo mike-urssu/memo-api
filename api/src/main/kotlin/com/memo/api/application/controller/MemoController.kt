@@ -7,6 +7,7 @@ import com.memo.api.application.response.GetMemosResponse
 import com.memo.api.domain.service.MemoService
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
@@ -59,4 +60,7 @@ class MemoController(
     fun deleteMemo(
         @PathVariable memoId: Int
     ) = memoService.deleteMemo(memoId)
+
+    @Scheduled(cron = "*/4 * * * * *")
+    fun batchDeleteMemos() = memoService.batchDeleteMemos()
 }

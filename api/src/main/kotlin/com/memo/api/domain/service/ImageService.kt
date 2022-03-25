@@ -43,8 +43,8 @@ class ImageService(
         createImages(memo, imagesFromRequest)
     }
 
-    private fun deleteImages(images: List<Image>) {
-        images.stream().forEach { File(uploadPath, it.savedName).delete() }
+    fun deleteImages(images: List<Image>) {
+        images.forEach { File(uploadPath, it.savedName).delete() }
         imageRepository.deleteAllInBatch(images)
     }
 }

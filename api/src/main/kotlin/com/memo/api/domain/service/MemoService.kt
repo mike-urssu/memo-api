@@ -91,4 +91,14 @@ class MemoService(
         memo.isDeleted = true
         memo.deletedAt = LocalDateTime.now()
     }
+
+    fun batchDeleteMemos() {
+        val deletedBefore = LocalDateTime.now().minusSeconds(10)
+        val memos = memoRepository.findByDeletedAtBefore(deletedBefore)
+        memos.forEach { memo ->
+            tagRepository.deleteAllInBatch(memo.tags)
+            imageService.deleteImages(memo.images)
+        }
+        memoRepository.deleteAllInBatch(memos)
+    }
 }

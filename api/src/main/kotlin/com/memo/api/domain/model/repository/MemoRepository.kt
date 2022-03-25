@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 import java.util.Optional
 
 @Repository
@@ -22,4 +23,6 @@ interface MemoRepository : JpaRepository<Memo, Int> {
     fun findAllByIsDeletedIsFalseAndContentContaining(content: String, pageable: Pageable): Page<Memo>
 
     fun findByIdAndIsDeletedIsFalse(memoId: Int): Optional<Memo>
+
+    fun findByDeletedAtBefore(time: LocalDateTime): List<Memo>
 }
