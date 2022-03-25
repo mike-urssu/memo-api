@@ -22,7 +22,7 @@ data class Memo(
     var content: String,
 
     @field:Column(nullable = false)
-    val isDeleted: Boolean = false,
+    var isDeleted: Boolean = false,
 
     @field:Column(nullable = false, columnDefinition = "DATETIME")
     val createdAt: LocalDateTime = LocalDateTime.now(),

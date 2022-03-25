@@ -53,4 +53,10 @@ class MemoController(
         @PathVariable memoId: Int,
         @Valid @ModelAttribute partialUpdateMemoRequest: PartialUpdateMemoRequest
     ) = memoService.updateMemoPartially(memoId, partialUpdateMemoRequest)
+
+    @DeleteMapping("/{memoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteMemo(
+        @PathVariable memoId: Int
+    ) = memoService.deleteMemo(memoId)
 }

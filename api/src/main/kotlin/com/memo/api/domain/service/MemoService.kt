@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.util.stream.Collectors
 
 @Service
+@Transactional
 class MemoService(
     private val tagService: TagService,
     private val imageService: ImageService,
@@ -29,7 +30,6 @@ class MemoService(
 
     private val updateMemoMapper: PartiallyUpdateMemoMapper
 ) {
-    @Transactional
     fun createMemo(createMemoRequest: CreateOrUpdateMemoRequest) {
         val memo = memoRepository.save(Memo(title = createMemoRequest.title, content = createMemoRequest.content))
         tagService.createTags(memo, createMemoRequest.tags)
@@ -71,7 +71,6 @@ class MemoService(
         return GetMemoDto(memo, tags, images)
     }
 
-    @Transactional
     fun updateMemo(memoId: Int, updateMemoRequest: CreateOrUpdateMemoRequest) {
         val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
         memo.updateMemo(updateMemoRequest)
@@ -79,11 +78,15 @@ class MemoService(
         imageService.updateImages(memo, updateMemoRequest.images)
     }
 
-    @Transactional
     fun updateMemoPartially(memoId: Int, partialUpdateMemoRequest: PartialUpdateMemoRequest) {
         val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
         updateMemoMapper.updateMemo(partialUpdateMemoRequest, memo)
         tagService.updateTags(memo, partialUpdateMemoRequest.tags)
         imageService.updateImages(memo, partialUpdateMemoRequest.images)
+    }
+
+    fun deleteMemo(memoId: Int) {
+        val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
+        memo.isDeleted = true
     }
 }
