@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 import java.util.stream.Collectors
 
 @Service
@@ -88,5 +89,6 @@ class MemoService(
     fun deleteMemo(memoId: Int) {
         val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
         memo.isDeleted = true
+        memo.deletedAt = LocalDateTime.now()
     }
 }

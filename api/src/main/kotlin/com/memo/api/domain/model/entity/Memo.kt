@@ -32,7 +32,7 @@ data class Memo(
     val updatedAt: LocalDateTime = createdAt,
 
     @field:Column(columnDefinition = "DATETIME")
-    val deletedAt: LocalDateTime? = null,
+    var deletedAt: LocalDateTime? = null,
 
     @field:OneToMany(mappedBy = "memo")
     var tags: MutableList<Tag> = mutableListOf(),
