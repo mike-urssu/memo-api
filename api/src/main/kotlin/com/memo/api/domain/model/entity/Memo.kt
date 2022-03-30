@@ -55,8 +55,13 @@ data class Memo(
         return this::class.simpleName + "(id = $id , title = $title , content = $content , isDeleted = $isDeleted , createdAt = $createdAt , updatedAt = $updatedAt , deletedAt = $deletedAt )"
     }
 
-    fun updateMemo(createOrUpdateMemoRequest: CreateOrUpdateMemoRequest) {
+    fun update(createOrUpdateMemoRequest: CreateOrUpdateMemoRequest) {
         this.title = createOrUpdateMemoRequest.title
         this.content = createOrUpdateMemoRequest.content
+    }
+
+    fun delete() {
+        this.isDeleted = true
+        this.deletedAt = LocalDateTime.now()
     }
 }

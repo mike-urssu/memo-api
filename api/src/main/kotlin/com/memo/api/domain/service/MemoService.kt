@@ -74,7 +74,7 @@ class MemoService(
 
     fun updateMemo(memoId: Int, updateMemoRequest: CreateOrUpdateMemoRequest) {
         val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
-        memo.updateMemo(updateMemoRequest)
+        memo.update(updateMemoRequest)
         tagService.updateTags(memo, updateMemoRequest.tags)
         imageService.updateImages(memo, updateMemoRequest.images)
     }
@@ -88,8 +88,7 @@ class MemoService(
 
     fun deleteMemo(memoId: Int) {
         val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
-        memo.isDeleted = true
-        memo.deletedAt = LocalDateTime.now()
+        memo.delete()
     }
 
     fun batchDeleteMemos() {

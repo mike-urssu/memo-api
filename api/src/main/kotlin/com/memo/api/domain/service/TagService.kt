@@ -8,10 +8,10 @@ import java.util.stream.Collectors
 import javax.transaction.Transactional
 
 @Service
+@Transactional
 class TagService(
     private val tagRepository: TagRepository
 ) {
-    @Transactional
     fun createTags(memo: Memo, tagsFromRequest: List<String>) {
         val tags = tagsFromRequest.stream()
             .map { content ->
@@ -22,7 +22,6 @@ class TagService(
         tagRepository.saveAll(tags)
     }
 
-    @Transactional
     fun updateTags(memo: Memo, tagsFromRequest: List<String>?) {
         if (tagsFromRequest == null)
             return

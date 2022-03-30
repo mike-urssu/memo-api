@@ -18,7 +18,7 @@ class GeneralExceptionHandler {
 
     @ExceptionHandler(BindException::class, MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleRequestValid(exception: BindException): ErrorResponse {
+    fun handleRequestInvalid(exception: BindException): ErrorResponse {
         val builder = StringBuilder()
         for (error in exception.bindingResult.fieldErrors)
             builder.appendLine("[field] ${error.field} [message] ${error.defaultMessage} [rejectedValue] ${error.rejectedValue}")

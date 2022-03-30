@@ -13,13 +13,13 @@ import java.util.stream.Collectors
 import javax.transaction.Transactional
 
 @Service
+@Transactional
 class ImageService(
     private val imageRepository: ImageRepository
 ) {
     @Value("\${application.upload-path}")
     lateinit var uploadPath: String
 
-    @Transactional
     fun createImages(memo: Memo, imagesFromRequest: List<MultipartFile>) {
         val images = imagesFromRequest.stream()
             .filter { !it.isEmpty }
@@ -34,7 +34,6 @@ class ImageService(
         imageRepository.saveAll(images)
     }
 
-    @Transactional
     fun updateImages(memo: Memo, imagesFromRequest: List<MultipartFile>?) {
         if (imagesFromRequest.isNullOrEmpty())
             return
