@@ -1,7 +1,7 @@
 package com.memo.api.application.controller
 
 import com.memo.api.application.request.CreateOrUpdatePostRequest
-import com.memo.api.application.request.PartialUpdateMemoRequest
+import com.memo.api.application.request.PartialUpdatePostRequest
 import com.memo.api.application.response.GetPostResponse
 import com.memo.api.application.response.GetPostsResponse
 import com.memo.api.domain.service.PostService
@@ -47,12 +47,12 @@ class PostController(
         @Valid @ModelAttribute updatePostRequest: CreateOrUpdatePostRequest
     ) = postService.updatePost(postId, updatePostRequest)
 
-    @PatchMapping("/{memoId}")
+    @PatchMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    fun partialUpdateMemo(
-        @PathVariable memoId: Int,
-        @Valid @ModelAttribute partialUpdateMemoRequest: PartialUpdateMemoRequest
-    ) = postService.updateMemoPartially(memoId, partialUpdateMemoRequest)
+    fun partialUpdatePost(
+        @PathVariable postId: Int,
+        @Valid @ModelAttribute partialUpdatePostRequest: PartialUpdatePostRequest
+    ) = postService.partialUpdatePost(postId, partialUpdatePostRequest)
 
     @DeleteMapping("/{memoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

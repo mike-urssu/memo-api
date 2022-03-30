@@ -24,13 +24,15 @@ class TagService(
         }
     }
 
-    fun updateTags(post: Post, tagsFromRequest: List<String>?) {
+    fun updateTagsIfPresent(post: Post, tagsFromRequest: List<String>?) {
         if (tagsFromRequest == null)
             return
 
-        tagRepository.deleteAllInBatch(post.tags)
-        createTags(post, tagsFromRequest)
+        post.postTags.forEach { postTag ->
+            postTagRepository.delete(postTag)
+            tagRepository.delete(postTag.tag)
+        }
 
-        postTagRepository
+        createTags(post, tagsFromRequest)
     }
 }

@@ -6,7 +6,6 @@ import org.hibernate.Hibernate
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
-import java.util.stream.Collectors
 import javax.persistence.*
 
 @Entity

@@ -1,6 +1,6 @@
 package com.memo.api.domain.model.mapper
 
-import com.memo.api.application.request.PartialUpdateMemoRequest
+import com.memo.api.application.request.PartialUpdatePostRequest
 import com.memo.api.domain.model.entity.Post
 import org.mapstruct.*
 
@@ -11,6 +11,6 @@ import org.mapstruct.*
 interface PartiallyUpdateMemoMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "tags", ignore = true)
-    @Mapping(target = "images", ignore = true)
-    fun updateMemo(partialUpdateMemoRequest: PartialUpdateMemoRequest, @MappingTarget post: Post)
+    @Mapping(target = "thumbnail", ignore = true)
+    fun updatePost(partialUpdatePostRequest: PartialUpdatePostRequest, @MappingTarget post: Post)
 }

@@ -1,7 +1,7 @@
 package com.memo.api.domain.service
 
 import com.memo.api.application.request.CreateOrUpdatePostRequest
-import com.memo.api.application.request.PartialUpdateMemoRequest
+import com.memo.api.application.request.PartialUpdatePostRequest
 import com.memo.api.domain.exception.PostNotFoundException
 import com.memo.api.domain.model.dto.GetPostsDto
 import com.memo.api.domain.model.entity.Post
@@ -54,15 +54,15 @@ class PostService(
     fun updatePost(postId: Int, updatePostRequest: CreateOrUpdatePostRequest) {
         val post = postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow { PostNotFoundException(postId) }
         post.update(updatePostRequest)
-        tagService.updateTags(post, updatePostRequest.tags)
-        thumbnailService.updateImages(post, updatePostRequest.thumbnail)
+        tagService.updateTagsIfPresent(post, updatePostRequest.tags)
+        thumbnailService.updateThumbnail(post, updatePostRequest.thumbnail)
     }
 
-    fun updateMemoPartially(memoId: Int, partialUpdateMemoRequest: PartialUpdateMemoRequest) {
-        val memo = postRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { PostNotFoundException(memoId) }
-        updateMemoMapper.updateMemo(partialUpdateMemoRequest, memo)
-        tagService.updateTags(memo, partialUpdateMemoRequest.tags)
-        thumbnailService.updateImages(memo, partialUpdateMemoRequest.images)
+    fun partialUpdatePost(postId: Int, partialUpdatePostRequest: PartialUpdatePostRequest) {
+        val post = postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow { PostNotFoundException(postId) }
+        updateMemoMapper.updatePost(partialUpdatePostRequest, post)
+        tagService.updateTagsIfPresent(post, partialUpdatePostRequest.tags)
+        thumbnailService.updateThumbnail(post, partialUpdatePostRequest.thumbnail)
     }
 
     fun deleteMemo(memoId: Int) {

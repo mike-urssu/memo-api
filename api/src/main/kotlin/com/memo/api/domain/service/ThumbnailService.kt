@@ -37,7 +37,7 @@ class ThumbnailService(
         post.thumbnail = thumbnail
     }
 
-    fun updateImages(post: Post, thumbnail: MultipartFile?) {
+    fun updateThumbnail(post: Post, thumbnail: MultipartFile?) {
         if (thumbnail == null || thumbnail.isEmpty)
             return
 
