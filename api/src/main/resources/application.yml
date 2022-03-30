@@ -7,6 +7,9 @@ server:
       force: true
 
 spring:
+  banner:
+    charset: UTF-8
+    location: banner.txt
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DATABASE_URL}
