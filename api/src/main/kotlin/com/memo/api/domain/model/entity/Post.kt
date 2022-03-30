@@ -1,6 +1,6 @@
 package com.memo.api.domain.model.entity
 
-import com.memo.api.application.request.CreateOrUpdateMemoRequest
+import com.memo.api.application.request.CreateOrUpdatePostRequest
 import org.hibernate.Hibernate
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.UpdateTimestamp
@@ -10,40 +10,41 @@ import javax.persistence.*
 @Entity
 @Table
 @DynamicUpdate
-data class Memo(
+data class Post(
     @field:Id
     @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @field:Column(nullable = false, columnDefinition = "VARCHAR(45)")
+    @field:Column(nullable = false, columnDefinition = "VARCHAR(100)")
     var title: String,
 
     @field:Column(nullable = false, columnDefinition = "TEXT")
-    var content: String,
+    var body: String,
+
+    @OneToOne
+    @JoinColumn(name = "thumbnail_id", referencedColumnName = "id")
+    var thumbnail: Thumbnail? = null,
 
     @field:Column(nullable = false)
     var isDeleted: Boolean = false,
 
     @field:Column(nullable = false, columnDefinition = "DATETIME")
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val releasedAt: LocalDateTime = LocalDateTime.now(),
 
     @field:Column(nullable = false, columnDefinition = "DATETIME")
     @UpdateTimestamp
-    val updatedAt: LocalDateTime = createdAt,
+    val updatedAt: LocalDateTime = releasedAt,
 
     @field:Column(columnDefinition = "DATETIME")
     var deletedAt: LocalDateTime? = null,
 
-    @field:OneToMany(mappedBy = "memo")
-    var tags: MutableList<Tag> = mutableListOf(),
-
-    @field:OneToMany(mappedBy = "memo")
-    var images: MutableList<Image> = mutableListOf()
+    @field:OneToMany(mappedBy = "post")
+    var postTags: MutableList<PostTag> = mutableListOf(),
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as Memo
+        other as Post
 
         return id != null && id == other.id
     }
@@ -52,12 +53,12 @@ data class Memo(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id = $id , title = $title , content = $content , isDeleted = $isDeleted , createdAt = $createdAt , updatedAt = $updatedAt , deletedAt = $deletedAt )"
+        return this::class.simpleName + "(id = $id , title = $title , body = $body , isDeleted = $isDeleted , releasedAt = $releasedAt , updatedAt = $updatedAt , deletedAt = $deletedAt )"
     }
 
-    fun update(createOrUpdateMemoRequest: CreateOrUpdateMemoRequest) {
-        this.title = createOrUpdateMemoRequest.title
-        this.content = createOrUpdateMemoRequest.content
+    fun update(createOrUpdatePostRequest: CreateOrUpdatePostRequest) {
+        this.title = createOrUpdatePostRequest.title
+        this.body = createOrUpdatePostRequest.body
     }
 
     fun delete() {

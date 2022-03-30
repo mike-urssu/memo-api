@@ -1,14 +1,14 @@
 package com.memo.api.domain.model.dto
 
-import com.memo.api.domain.model.entity.Memo
+import com.memo.api.domain.model.entity.Post
 
 class GetMemoDto(
-    memo: Memo,
+    post: Post,
     val tags: List<GetTagsDto>,
     val images: List<GetImagesDto>
 ) {
-    val id = memo.id!!
-    val title = memo.title
-    val content = memo.content
-    val updatedAt = memo.updatedAt
+    val id = post.id!!
+    val title = post.title
+    val content = post.body
+    val updatedAt = post.updatedAt
 }

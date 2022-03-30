@@ -1,8 +1,8 @@
 package com.memo.api.domain.model.dto
 
-import com.memo.api.domain.model.entity.Image
+import com.memo.api.domain.model.entity.Thumbnail
 
-class GetImagesDto(image: Image) {
-    val id = image.id!!
-    val fileName = image.fileName
+class GetImagesDto(thumbnail: Thumbnail) {
+    val id = thumbnail.id!!
+    val fileName = thumbnail.filename
 }
