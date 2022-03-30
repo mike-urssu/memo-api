@@ -9,10 +9,9 @@ class Tag(
     @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @field:ManyToOne(fetch = FetchType.LAZY)
-    @field:JoinColumn(nullable = false)
-    val memo: Memo,
-
     @field:Column(nullable = false, columnDefinition = "VARCHAR(45)")
-    val content: String
+    val name: String,
+
+    @field:OneToMany(mappedBy = "tag")
+    var postTags: MutableList<PostTag> = mutableListOf()
 )

@@ -1,16 +1,16 @@
 package com.memo.api.domain.service
 
-import com.memo.api.application.request.CreateOrUpdateMemoRequest
+import com.memo.api.application.request.CreateOrUpdatePostRequest
 import com.memo.api.application.request.PartialUpdateMemoRequest
 import com.memo.api.domain.exception.MemoNotFoundException
 import com.memo.api.domain.model.dto.GetImagesDto
 import com.memo.api.domain.model.dto.GetMemoDto
 import com.memo.api.domain.model.dto.GetMemosDto
 import com.memo.api.domain.model.dto.GetTagsDto
-import com.memo.api.domain.model.entity.Memo
+import com.memo.api.domain.model.entity.Post
 import com.memo.api.domain.model.mapper.PartiallyUpdateMemoMapper
-import com.memo.api.domain.model.repository.ImageRepository
-import com.memo.api.domain.model.repository.MemoRepository
+import com.memo.api.domain.model.repository.ThumbnailRepository
+import com.memo.api.domain.model.repository.PostRepository
 import com.memo.api.domain.model.repository.TagRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -21,43 +21,43 @@ import java.util.stream.Collectors
 
 @Service
 @Transactional
-class MemoService(
+class PostService(
     private val tagService: TagService,
-    private val imageService: ImageService,
+    private val thumbnailService: ThumbnailService,
 
-    private val memoRepository: MemoRepository,
+    private val postRepository: PostRepository,
     private val tagRepository: TagRepository,
-    private val imageRepository: ImageRepository,
+    private val thumbnailRepository: ThumbnailRepository,
 
     private val updateMemoMapper: PartiallyUpdateMemoMapper
 ) {
-    fun createMemo(createMemoRequest: CreateOrUpdateMemoRequest) {
-        val memo = memoRepository.save(Memo(title = createMemoRequest.title, content = createMemoRequest.content))
-        tagService.createTags(memo, createMemoRequest.tags)
-        imageService.createImages(memo, createMemoRequest.images)
+    fun createPost(createPostRequest: CreateOrUpdatePostRequest) {
+        val post = postRepository.save(Post(title = createPostRequest.title, body = createPostRequest.body))
+        tagService.createTags(post, createPostRequest.tags)
+        thumbnailService.createThumbnail(post, createPostRequest.thumbnail)
     }
 
     @Transactional(readOnly = true)
     fun getMemos(pageable: PageRequest, title: String?, content: String?): Page<GetMemosDto> {
         val memos =
             if (!title.isNullOrEmpty() && !content.isNullOrEmpty())
-                memoRepository.findAllByIsDeletedIsFalseAndTitleContainingOrContentContaining(title, content, pageable)
+                postRepository.findAllByIsDeletedIsFalseAndTitleContainingOrContentContaining(title, content, pageable)
             else if (!title.isNullOrEmpty())
-                memoRepository.findAllByIsDeletedIsFalseAndTitleContaining(title, pageable)
+                postRepository.findAllByIsDeletedIsFalseAndTitleContaining(title, pageable)
             else if (!content.isNullOrEmpty())
-                memoRepository.findAllByIsDeletedIsFalseAndContentContaining(content, pageable)
+                postRepository.findAllByIsDeletedIsFalseAndContentContaining(content, pageable)
             else
-                memoRepository.findAllByIsDeletedIsFalse(pageable)
+                postRepository.findAllByIsDeletedIsFalse(pageable)
         return memos.map { memo ->
             val tagSize = tagRepository.countByMemo(memo)
-            val imageSize = imageRepository.countByMemo(memo)
+            val imageSize = thumbnailRepository.countByMemo(memo)
             GetMemosDto(memo, tagSize, imageSize)
         }
     }
 
     @Transactional(readOnly = true)
     fun getMemo(memoId: Int): GetMemoDto {
-        val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
+        val memo = postRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
 
         val tags = memo.tags.stream()
             .map {
@@ -72,32 +72,32 @@ class MemoService(
         return GetMemoDto(memo, tags, images)
     }
 
-    fun updateMemo(memoId: Int, updateMemoRequest: CreateOrUpdateMemoRequest) {
-        val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
+    fun updateMemo(memoId: Int, updateMemoRequest: CreateOrUpdatePostRequest) {
+        val memo = postRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
         memo.update(updateMemoRequest)
         tagService.updateTags(memo, updateMemoRequest.tags)
-        imageService.updateImages(memo, updateMemoRequest.images)
+        thumbnailService.updateImages(memo, updateMemoRequest.images)
     }
 
     fun updateMemoPartially(memoId: Int, partialUpdateMemoRequest: PartialUpdateMemoRequest) {
-        val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
+        val memo = postRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
         updateMemoMapper.updateMemo(partialUpdateMemoRequest, memo)
         tagService.updateTags(memo, partialUpdateMemoRequest.tags)
-        imageService.updateImages(memo, partialUpdateMemoRequest.images)
+        thumbnailService.updateImages(memo, partialUpdateMemoRequest.images)
     }
 
     fun deleteMemo(memoId: Int) {
-        val memo = memoRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
+        val memo = postRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { MemoNotFoundException(memoId) }
         memo.delete()
     }
 
     fun batchDeleteMemos() {
         val deletedBefore = LocalDateTime.now().minusSeconds(10)
-        val memos = memoRepository.findByDeletedAtBefore(deletedBefore)
+        val memos = postRepository.findByDeletedAtBefore(deletedBefore)
         memos.forEach { memo ->
             tagRepository.deleteAllInBatch(memo.tags)
-            imageService.deleteImages(memo.images)
+            thumbnailService.deleteImages(memo.images)
         }
-        memoRepository.deleteAllInBatch(memos)
+        postRepository.deleteAllInBatch(memos)
     }
 }
