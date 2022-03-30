@@ -58,9 +58,9 @@ data class Post(
         return this::class.simpleName + "(id = $id , title = $title , body = $body , isDeleted = $isDeleted , releasedAt = $releasedAt , updatedAt = $updatedAt , deletedAt = $deletedAt )"
     }
 
-    fun update(createOrUpdatePostRequest: CreateOrUpdatePostRequest) {
-        this.title = createOrUpdatePostRequest.title
-        this.body = createOrUpdatePostRequest.body
+    fun update(updatePostRequest: CreateOrUpdatePostRequest) {
+        this.title = updatePostRequest.title
+        this.body = updatePostRequest.body
     }
 
     fun delete() {

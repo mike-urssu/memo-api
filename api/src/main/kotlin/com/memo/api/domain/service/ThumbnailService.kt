@@ -24,7 +24,7 @@ class ThumbnailService(
     @Value("\${application.upload-path}")
     lateinit var uploadPath: String
 
-    fun createThumbnail(post: Post, imagesFromRequest: MultipartFile?) {
+    fun createThumbnailIfPresent(post: Post, imagesFromRequest: MultipartFile?) {
         if (imagesFromRequest == null || imagesFromRequest.isEmpty)
             return
 
@@ -37,17 +37,19 @@ class ThumbnailService(
         post.thumbnail = thumbnail
     }
 
-    fun updateImages(post: Post, imagesFromRequest: List<MultipartFile>?) {
-        if (imagesFromRequest.isNullOrEmpty())
+    fun updateImages(post: Post, thumbnail: MultipartFile?) {
+        if (thumbnail == null || thumbnail.isEmpty)
             return
 
-        deleteImages(post.images)
-        createImages(post, imagesFromRequest)
+        deleteThumbnailIfPresent(post)
+        createThumbnailIfPresent(post, thumbnail)
     }
 
-    fun deleteImages(thumbnails: List<Thumbnail>) {
-        thumbnails.forEach { File(uploadPath, it.savedName).delete() }
-        thumbnailRepository.deleteAllInBatch(thumbnails)
+    fun deleteThumbnailIfPresent(post: Post) {
+        if (post.thumbnail != null) {
+            File(uploadPath, post.thumbnail!!.savedName).delete()
+            thumbnailRepository.delete(post.thumbnail!!)
+        }
     }
 
     fun viewImage(imageId: Int): ByteArray {

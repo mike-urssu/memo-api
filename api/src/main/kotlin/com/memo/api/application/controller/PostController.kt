@@ -40,12 +40,12 @@ class PostController(
         @PathVariable postId: Int
     ) = GetPostResponse(postService.getPost(postId))
 
-    @PutMapping("/{memoId}")
+    @PutMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    fun updateMemo(
-        @PathVariable memoId: Int,
-        @Valid @ModelAttribute updateMemoRequest: CreateOrUpdatePostRequest
-    ) = postService.updateMemo(memoId, updateMemoRequest)
+    fun updatePost(
+        @PathVariable postId: Int,
+        @Valid @ModelAttribute updatePostRequest: CreateOrUpdatePostRequest
+    ) = postService.updatePost(postId, updatePostRequest)
 
     @PatchMapping("/{memoId}")
     @ResponseStatus(HttpStatus.OK)

@@ -30,7 +30,7 @@ class PostService(
     fun createPost(createPostRequest: CreateOrUpdatePostRequest) {
         val post = postRepository.save(Post(title = createPostRequest.title, body = createPostRequest.body))
         tagService.createTags(post, createPostRequest.tags)
-        thumbnailService.createThumbnail(post, createPostRequest.thumbnail)
+        thumbnailService.createThumbnailIfPresent(post, createPostRequest.thumbnail)
     }
 
     @Transactional(readOnly = true)
@@ -51,11 +51,11 @@ class PostService(
     fun getPost(postId: Int) =
         postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow { PostNotFoundException(postId) }.toGetPostDto()
 
-    fun updateMemo(memoId: Int, updateMemoRequest: CreateOrUpdatePostRequest) {
-        val memo = postRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { PostNotFoundException(memoId) }
-        memo.update(updateMemoRequest)
-        tagService.updateTags(memo, updateMemoRequest.tags)
-        thumbnailService.updateImages(memo, updateMemoRequest.images)
+    fun updatePost(postId: Int, updatePostRequest: CreateOrUpdatePostRequest) {
+        val post = postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow { PostNotFoundException(postId) }
+        post.update(updatePostRequest)
+        tagService.updateTags(post, updatePostRequest.tags)
+        thumbnailService.updateImages(post, updatePostRequest.thumbnail)
     }
 
     fun updateMemoPartially(memoId: Int, partialUpdateMemoRequest: PartialUpdateMemoRequest) {

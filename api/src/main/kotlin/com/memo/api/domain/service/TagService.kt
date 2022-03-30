@@ -30,5 +30,7 @@ class TagService(
 
         tagRepository.deleteAllInBatch(post.tags)
         createTags(post, tagsFromRequest)
+
+        postTagRepository
     }
 }
