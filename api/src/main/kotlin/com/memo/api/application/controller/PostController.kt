@@ -27,11 +27,10 @@ class PostController(
     fun getMemos(
         @RequestParam(required = false, defaultValue = "0") page: Int,
         @RequestParam(required = false, defaultValue = "10") size: Int,
-        @RequestParam(required = false) title: String?,
-        @RequestParam(required = false) content: String?
+        @RequestParam(required = false) keyword: String?,
     ): GetMemosResponse {
         val pageable = PageRequest.of(page, size)
-        val memos = postService.getMemos(pageable, title, content)
+        val memos = postService.getMemos(pageable, keyword)
         return GetMemosResponse(memos)
     }
 

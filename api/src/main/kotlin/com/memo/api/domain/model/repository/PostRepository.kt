@@ -12,15 +12,11 @@ import java.util.Optional
 interface PostRepository : JpaRepository<Post, Int> {
     fun findAllByIsDeletedIsFalse(pageable: Pageable): Page<Post>
 
-    fun findAllByIsDeletedIsFalseAndTitleContainingOrContentContaining(
+    fun findAllByIsDeletedIsFalseAndTitleContainingOrBodyContaining(
         title: String,
-        content: String,
+        body: String,
         pageable: Pageable
     ): Page<Post>
-
-    fun findAllByIsDeletedIsFalseAndTitleContaining(title: String, pageable: Pageable): Page<Post>
-
-    fun findAllByIsDeletedIsFalseAndContentContaining(content: String, pageable: Pageable): Page<Post>
 
     fun findByIdAndIsDeletedIsFalse(memoId: Int): Optional<Post>
 

@@ -38,21 +38,17 @@ class PostService(
     }
 
     @Transactional(readOnly = true)
-    fun getMemos(pageable: PageRequest, title: String?, content: String?): Page<GetMemosDto> {
-        val memos =
-            if (!title.isNullOrEmpty() && !content.isNullOrEmpty())
-                postRepository.findAllByIsDeletedIsFalseAndTitleContainingOrContentContaining(title, content, pageable)
-            else if (!title.isNullOrEmpty())
-                postRepository.findAllByIsDeletedIsFalseAndTitleContaining(title, pageable)
-            else if (!content.isNullOrEmpty())
-                postRepository.findAllByIsDeletedIsFalseAndContentContaining(content, pageable)
-            else
-                postRepository.findAllByIsDeletedIsFalse(pageable)
-        return memos.map { memo ->
-            val tagSize = tagRepository.countByMemo(memo)
-            val imageSize = thumbnailRepository.countByMemo(memo)
-            GetMemosDto(memo, tagSize, imageSize)
-        }
+    fun getMemos(pageable: PageRequest, keyword: String?): Page<GetMemosDto> {
+        return (
+                if (keyword == null)
+                    postRepository.findAllByIsDeletedIsFalse(pageable)
+                else
+                    postRepository.findAllByIsDeletedIsFalseAndTitleContainingOrBodyContaining(
+                        keyword,
+                        keyword,
+                        pageable
+                    )
+                ).map { GetMemosDto(it) }
     }
 
     @Transactional(readOnly = true)
