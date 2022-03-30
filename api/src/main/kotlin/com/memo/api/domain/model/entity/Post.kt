@@ -22,8 +22,8 @@ data class Post(
     @field:Column(nullable = false, columnDefinition = "TEXT")
     var body: String,
 
-    @OneToOne
-    @JoinColumn(name = "thumbnail_id", referencedColumnName = "id")
+    @field:OneToOne
+    @field:JoinColumn(name = "thumbnail_id", referencedColumnName = "id")
     var thumbnail: Thumbnail? = null,
 
     @field:Column(nullable = false)

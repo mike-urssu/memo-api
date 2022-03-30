@@ -1,22 +1,19 @@
 package com.memo.api.domain.model.entity
 
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table
 class PostTag(
-    @Id
+    @field:Id
+    @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    @field:ManyToOne
+    @field:JoinColumn(name = "post_id", referencedColumnName = "id")
     val post: Post,
 
-    @ManyToOne
-    @JoinColumn(name = "tag_id", referencedColumnName = "id")
+    @field:ManyToOne
+    @field:JoinColumn(name = "tag_id", referencedColumnName = "id")
     val tag: Tag
 )

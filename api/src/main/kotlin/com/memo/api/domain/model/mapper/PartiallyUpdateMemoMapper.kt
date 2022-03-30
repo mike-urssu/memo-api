@@ -10,7 +10,5 @@ import org.mapstruct.*
 )
 interface PartiallyUpdateMemoMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(target = "tags", ignore = true)
-    @Mapping(target = "thumbnail", ignore = true)
     fun updatePost(partialUpdatePostRequest: PartialUpdatePostRequest, @MappingTarget post: Post)
 }
