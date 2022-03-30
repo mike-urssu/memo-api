@@ -1,10 +1,12 @@
 package com.memo.api.domain.model.entity
 
 import com.memo.api.application.request.CreateOrUpdatePostRequest
+import com.memo.api.domain.model.dto.GetPostDto
 import org.hibernate.Hibernate
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
+import java.util.stream.Collectors
 import javax.persistence.*
 
 @Entity
@@ -65,4 +67,6 @@ data class Post(
         this.isDeleted = true
         this.deletedAt = LocalDateTime.now()
     }
+
+    fun toGetPostDto() = GetPostDto(this)
 }

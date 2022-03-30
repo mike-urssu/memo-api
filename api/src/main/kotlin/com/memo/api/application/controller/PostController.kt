@@ -2,7 +2,7 @@ package com.memo.api.application.controller
 
 import com.memo.api.application.request.CreateOrUpdatePostRequest
 import com.memo.api.application.request.PartialUpdateMemoRequest
-import com.memo.api.application.response.GetMemoResponse
+import com.memo.api.application.response.GetPostResponse
 import com.memo.api.application.response.GetPostsResponse
 import com.memo.api.domain.service.PostService
 import org.springframework.data.domain.PageRequest
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/v1/memos")
+@RequestMapping("/v1/velog")
 class PostController(
     private val postService: PostService
 ) {
@@ -34,11 +34,11 @@ class PostController(
         return GetPostsResponse(posts)
     }
 
-    @GetMapping("/{memoId}")
+    @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    fun getMemo(
-        @PathVariable memoId: Int
-    ) = GetMemoResponse(postService.getMemo(memoId))
+    fun getPost(
+        @PathVariable postId: Int
+    ) = GetPostResponse(postService.getPost(postId))
 
     @PutMapping("/{memoId}")
     @ResponseStatus(HttpStatus.OK)
