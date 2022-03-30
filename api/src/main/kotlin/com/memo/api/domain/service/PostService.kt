@@ -7,8 +7,7 @@ import com.memo.api.domain.model.dto.GetPostsDto
 import com.memo.api.domain.model.entity.Post
 import com.memo.api.domain.model.mapper.PartiallyUpdateMemoMapper
 import com.memo.api.domain.model.repository.PostRepository
-import com.memo.api.domain.model.repository.TagRepository
-import com.memo.api.domain.model.repository.ThumbnailRepository
+import com.memo.api.domain.model.repository.PostTagRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -22,8 +21,7 @@ class PostService(
     private val thumbnailService: ThumbnailService,
 
     private val postRepository: PostRepository,
-    private val tagRepository: TagRepository,
-    private val thumbnailRepository: ThumbnailRepository,
+    private val postTagRepository: PostTagRepository,
 
     private val updateMemoMapper: PartiallyUpdateMemoMapper
 ) {
@@ -70,13 +68,13 @@ class PostService(
         post.delete()
     }
 
-    fun batchDeleteMemos() {
+    fun batchDeletePosts() {
         val deletedBefore = LocalDateTime.now().minusSeconds(10)
-        val memos = postRepository.findByDeletedAtBefore(deletedBefore)
-        memos.forEach { memo ->
-            tagRepository.deleteAllInBatch(memo.tags)
-            thumbnailService.deleteImages(memo.images)
+        val posts = postRepository.findByDeletedAtBefore(deletedBefore)
+        posts.forEach { post ->
+            postTagRepository.deleteAllInBatch(post.postTags)
+            thumbnailService.deleteThumbnailIfPresent(post)
         }
-        postRepository.deleteAllInBatch(memos)
+        postRepository.deleteAllInBatch(posts)
     }
 }
