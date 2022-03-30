@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class MemoExceptionHandler {
     @ExceptionHandler(MemoNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleMemoNotFound(exception: MemoNotFoundException): ErrorResponse {
-        return ErrorResponse(HttpStatus.NOT_FOUND, "Memo-001", exception.message!!)
-    }
+    fun handleMemoNotFound(exception: MemoNotFoundException) =
+        ErrorResponse(HttpStatus.NOT_FOUND, "Memo-001", exception.message!!)
 }
