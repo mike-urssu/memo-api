@@ -54,11 +54,11 @@ class PostController(
         @Valid @ModelAttribute partialUpdatePostRequest: PartialUpdatePostRequest
     ) = postService.partialUpdatePost(postId, partialUpdatePostRequest)
 
-    @DeleteMapping("/{memoId}")
+    @DeleteMapping("/{postId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteMemo(
-        @PathVariable memoId: Int
-    ) = postService.deleteMemo(memoId)
+    fun deletePost(
+        @PathVariable postId: Int
+    ) = postService.deletePost(postId)
 
     @Scheduled(cron = "*/4 * * * * *")
     fun batchDeleteMemos() = postService.batchDeleteMemos()

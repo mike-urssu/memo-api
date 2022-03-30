@@ -65,9 +65,9 @@ class PostService(
         thumbnailService.updateThumbnail(post, partialUpdatePostRequest.thumbnail)
     }
 
-    fun deleteMemo(memoId: Int) {
-        val memo = postRepository.findByIdAndIsDeletedIsFalse(memoId).orElseThrow { PostNotFoundException(memoId) }
-        memo.delete()
+    fun deletePost(postId: Int) {
+        val post = postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow { PostNotFoundException(postId) }
+        post.delete()
     }
 
     fun batchDeleteMemos() {
