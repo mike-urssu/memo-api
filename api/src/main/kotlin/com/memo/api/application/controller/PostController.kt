@@ -3,7 +3,7 @@ package com.memo.api.application.controller
 import com.memo.api.application.request.CreateOrUpdatePostRequest
 import com.memo.api.application.request.PartialUpdateMemoRequest
 import com.memo.api.application.response.GetMemoResponse
-import com.memo.api.application.response.GetMemosResponse
+import com.memo.api.application.response.GetPostsResponse
 import com.memo.api.domain.service.PostService
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
@@ -24,14 +24,14 @@ class PostController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun getMemos(
+    fun getPosts(
         @RequestParam(required = false, defaultValue = "0") page: Int,
         @RequestParam(required = false, defaultValue = "10") size: Int,
-        @RequestParam(required = false) keyword: String?,
-    ): GetMemosResponse {
+        @RequestParam(required = false) keyword: String?
+    ): GetPostsResponse {
         val pageable = PageRequest.of(page, size)
-        val memos = postService.getMemos(pageable, keyword)
-        return GetMemosResponse(memos)
+        val posts = postService.getPosts(pageable, keyword)
+        return GetPostsResponse(posts)
     }
 
     @GetMapping("/{memoId}")

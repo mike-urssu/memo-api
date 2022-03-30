@@ -5,7 +5,7 @@ import com.memo.api.application.request.PartialUpdateMemoRequest
 import com.memo.api.domain.exception.MemoNotFoundException
 import com.memo.api.domain.model.dto.GetImagesDto
 import com.memo.api.domain.model.dto.GetMemoDto
-import com.memo.api.domain.model.dto.GetMemosDto
+import com.memo.api.domain.model.dto.GetPostsDto
 import com.memo.api.domain.model.dto.GetTagsDto
 import com.memo.api.domain.model.entity.Post
 import com.memo.api.domain.model.mapper.PartiallyUpdateMemoMapper
@@ -38,7 +38,7 @@ class PostService(
     }
 
     @Transactional(readOnly = true)
-    fun getMemos(pageable: PageRequest, keyword: String?): Page<GetMemosDto> {
+    fun getPosts(pageable: PageRequest, keyword: String?): Page<GetPostsDto> {
         return (
                 if (keyword == null)
                     postRepository.findAllByIsDeletedIsFalse(pageable)
@@ -48,7 +48,7 @@ class PostService(
                         keyword,
                         pageable
                     )
-                ).map { GetMemosDto(it) }
+                ).map { GetPostsDto(it) }
     }
 
     @Transactional(readOnly = true)

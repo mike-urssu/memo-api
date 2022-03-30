@@ -3,7 +3,7 @@ package com.memo.api.domain.model.dto
 import com.memo.api.domain.model.entity.Post
 import java.util.stream.Collectors
 
-class GetMemosDto(
+class GetPostsDto(
     post: Post
 ) {
     val id = post.id!!
