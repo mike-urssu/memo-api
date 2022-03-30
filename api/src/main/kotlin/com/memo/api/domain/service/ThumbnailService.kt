@@ -30,7 +30,7 @@ class ThumbnailService(
 
         val filename = imagesFromRequest.originalFilename!!
         val savedName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(filename)
-        imagesFromRequest.transferTo(File(uploadPath, savedName))
+        imagesFromRequest.transferTo(File(File(uploadPath).absolutePath, savedName))
 
         val thumbnail = Thumbnail(filename = filename, savedName = savedName)
         thumbnailRepository.save(thumbnail)

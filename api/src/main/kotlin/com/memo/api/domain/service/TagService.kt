@@ -6,6 +6,7 @@ import com.memo.api.domain.model.entity.Tag
 import com.memo.api.domain.model.repository.PostTagRepository
 import com.memo.api.domain.model.repository.TagRepository
 import org.springframework.stereotype.Service
+import java.util.stream.Collectors
 import javax.transaction.Transactional
 
 @Service
@@ -15,13 +16,25 @@ class TagService(
 
     private val postTagRepository: PostTagRepository
 ) {
-    fun createTags(post: Post, tagsFromRequest: List<String>) {
-        tagsFromRequest.forEach { name ->
-            val tag = tagRepository.save(Tag(name = name))
+    fun createTags(post: Post, names: List<String>) {
+        val tagsToSave = names.stream()
+            .filter { name -> !tagRepository.existsByName(name) }
+            .map { name -> Tag(name = name) }
+            .collect(Collectors.toList())
+
+        tagRepository.saveAll(tagsToSave).forEach { tag ->
             val postTag = postTagRepository.save(PostTag(post = post, tag = tag))
-            post.postTags.add(postTag)
             tag.postTags.add(postTag)
+            post.postTags.add(postTag)
         }
+
+//        names.forEach { name ->
+//            val tag = tagRepository.findByName(name)
+//                .orElseGet { tagRepository.save(Tag(name = name)) }
+//            val postTag = postTagRepository.save(PostTag(post = post, tag = tag))
+//            post.postTags.add(postTag)
+//            tag.postTags.add(postTag)
+//        }
     }
 
     fun updateTagsIfPresent(post: Post, tagsFromRequest: List<String>?) {
