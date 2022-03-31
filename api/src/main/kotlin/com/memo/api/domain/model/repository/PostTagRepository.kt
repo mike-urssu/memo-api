@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface PostTagRepository : JpaRepository<PostTag, Int> {
-    fun findAllByPostAndTagIn(post: Post, tags: List<Tag>): List<PostTag>
+    fun existsByPostAndTag(post: Post, tag: Tag): Boolean
 }

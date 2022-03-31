@@ -13,7 +13,6 @@ import javax.transaction.Transactional
 @Transactional
 class TagService(
     private val tagRepository: TagRepository,
-
     private val postTagRepository: PostTagRepository
 ) {
     fun createTags(post: Post, names: List<String>) {
@@ -22,33 +21,31 @@ class TagService(
             .filter { name -> !tagRepository.existsByName(name) }
             .map { name -> Tag(name = name) }
             .collect(Collectors.toList())
-
-        tagRepository.saveAll(tagsToSave).forEach { tag ->
-            val postTag = postTagRepository.save(PostTag(post = post, tag = tag))
-            tag.postTags.add(postTag)
-            post.postTags.add(postTag)
-        }
-
-//        names.stream()
-//            .distinct()
-//            .forEach { name ->
-//                val tag = tagRepository.findByName(name)
-//                    .orElseGet { tagRepository.save(Tag(name = name)) }
-//                val postTag = postTagRepository.save(PostTag(post = post, tag = tag))
-//                post.postTags.add(postTag)
-//                tag.postTags.add(postTag)
-//            }
+        tagRepository.saveAll(tagsToSave)
     }
 
-    fun updateTagsIfPresent(post: Post, tagsFromRequest: List<String>?) {
-        if (tagsFromRequest == null)
+    fun createPostTags(post: Post, names: List<String>) {
+        tagRepository.findAllByNameIn(names).stream()
+            .filter { tag -> !postTagRepository.existsByPostAndTag(post, tag) }
+            .forEach { tag ->
+                val postTag = postTagRepository.save(PostTag(post = post, tag = tag))
+                tag.postTags.add(postTag)
+                post.postTags.add(postTag)
+            }
+    }
+
+    fun updateTagsIfPresent(post: Post, names: List<String>?) {
+        if (names == null)
             return
+        deleteUnusedPostTags(post.postTags, names)
+        createTags(post, names)
+        createPostTags(post, names)
+    }
 
-        post.postTags.forEach { postTag ->
-            postTagRepository.delete(postTag)
-            tagRepository.delete(postTag.tag)
-        }
-
-        createTags(post, tagsFromRequest)
+    private fun deleteUnusedPostTags(postTags: List<PostTag>, names: List<String>) {
+        val set = names.toSet()
+        postTags.stream()
+            .filter { postTag -> !set.contains(postTag.tag.name) }
+            .forEach { postTag -> postTagRepository.delete(postTag) }
     }
 }

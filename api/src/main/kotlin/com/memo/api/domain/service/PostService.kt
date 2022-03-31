@@ -28,6 +28,7 @@ class PostService(
     fun createPost(createPostRequest: CreateOrUpdatePostRequest) {
         val post = postRepository.save(Post(title = createPostRequest.title, body = createPostRequest.body))
         tagService.createTags(post, createPostRequest.tags)
+        tagService.createPostTags(post, createPostRequest.tags)
         thumbnailService.createThumbnailIfPresent(post, createPostRequest.thumbnail)
     }
 
