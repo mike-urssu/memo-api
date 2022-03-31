@@ -6,7 +6,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/v1/images")
+@RequestMapping("/v1/velog/images")
 class ThumbnailController(
     private val thumbnailService: ThumbnailService
 ) {

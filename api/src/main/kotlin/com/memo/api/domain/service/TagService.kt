@@ -1,5 +1,6 @@
 package com.memo.api.domain.service
 
+import com.memo.api.domain.model.dto.GetTagsDto
 import com.memo.api.domain.model.entity.Post
 import com.memo.api.domain.model.entity.PostTag
 import com.memo.api.domain.model.entity.Tag
@@ -48,4 +49,9 @@ class TagService(
             .filter { postTag -> !set.contains(postTag.tag.name) }
             .forEach { postTag -> postTagRepository.delete(postTag) }
     }
+
+    fun getTags(): List<GetTagsDto> = tagRepository.findAll().stream()
+        .filter { tag -> tag.postTags.size != 0 }
+        .map { tag -> GetTagsDto(tag) }
+        .collect(Collectors.toList())
 }
