@@ -60,6 +60,6 @@ class PostController(
         @PathVariable postId: Int
     ) = postService.deletePost(postId)
 
-    //    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 * * * * *")
     fun batchDeletePosts() = postService.batchDeletePosts()
 }
