@@ -9,7 +9,6 @@ data class PartialUpdatePostRequest(
 
     val body: String?,
 
-    @field:Size(max = 3, message = "Up to 3 tags can be registered.")
     val tags: List<String>?,
 
     val thumbnail: MultipartFile?
