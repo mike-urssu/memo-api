@@ -33,16 +33,19 @@ class PostService(
     }
 
     @Transactional(readOnly = true)
-    fun getPosts(pageable: PageRequest, keyword: String?): Page<GetPostsDto> {
+    fun getPosts(pageable: PageRequest, keyword: String?, tag: String?): Page<GetPostsDto> {
         return (
-                if (keyword == null)
-                    postRepository.findAllByIsDeletedIsFalse(pageable)
-                else
+                if (keyword != null)
                     postRepository.findAllByIsDeletedIsFalseAndTitleContainingOrBodyContaining(
                         keyword,
                         keyword,
                         pageable
                     )
+                else if (tag == null)
+                    postRepository.findAllByIsDeletedIsFalse(pageable)
+                else
+                    postTagRepository.findAllByTag_NameContaining(tag, pageable)
+                        .map { postTag -> postTag.post }
                 ).map { GetPostsDto(it) }
     }
 

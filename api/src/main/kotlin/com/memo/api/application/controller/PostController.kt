@@ -27,10 +27,11 @@ class PostController(
     fun getPosts(
         @RequestParam(required = false, defaultValue = "0") page: Int,
         @RequestParam(required = false, defaultValue = "10") size: Int,
-        @RequestParam(required = false) keyword: String?
+        @RequestParam(required = false) keyword: String?,
+        @RequestParam(required = false) tag: String?
     ): GetPostsResponse {
         val pageable = PageRequest.of(page, size)
-        val posts = postService.getPosts(pageable, keyword)
+        val posts = postService.getPosts(pageable, keyword, tag)
         return GetPostsResponse(posts)
     }
 
