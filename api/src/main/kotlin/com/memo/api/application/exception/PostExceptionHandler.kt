@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-class MemoExceptionHandler {
+class PostExceptionHandler {
     @ExceptionHandler(PostNotFoundException::class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    fun handleMemoNotFound(exception: PostNotFoundException) =
-        ErrorResponse(HttpStatus.NOT_FOUND, "Memo-001", exception.message!!)
+    fun handlePostNotFound(exception: PostNotFoundException) =
+        ErrorResponse(HttpStatus.NOT_FOUND, "Post-001", exception.message!!)
 }

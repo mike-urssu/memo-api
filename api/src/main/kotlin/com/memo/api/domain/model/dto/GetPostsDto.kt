@@ -12,6 +12,6 @@ class GetPostsDto(
     val tags = post.postTags.stream().map {
         it.tag.name
     }.collect(Collectors.toList())
-    val savedName = post.thumbnail!!.savedName
+    val savedName = post.thumbnail?.savedName
     val updatedAt = post.updatedAt
 }

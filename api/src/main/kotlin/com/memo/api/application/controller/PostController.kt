@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
-@RequestMapping("/v1/velog")
+@RequestMapping("/v1/velog/posts")
 class PostController(
     private val postService: PostService
 ) {
@@ -60,6 +60,6 @@ class PostController(
         @PathVariable postId: Int
     ) = postService.deletePost(postId)
 
-    @Scheduled(cron = "0 * * * * *")
+    //    @Scheduled(cron = "0 * * * * *")
     fun batchDeletePosts() = postService.batchDeletePosts()
 }

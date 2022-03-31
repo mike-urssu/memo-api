@@ -23,7 +23,7 @@ class PostService(
     private val postRepository: PostRepository,
     private val postTagRepository: PostTagRepository,
 
-    private val updateMemoMapper: PartiallyUpdateMemoMapper
+    private val updatePostMapper: PartiallyUpdateMemoMapper
 ) {
     fun createPost(createPostRequest: CreateOrUpdatePostRequest) {
         val post = postRepository.save(Post(title = createPostRequest.title, body = createPostRequest.body))
@@ -58,7 +58,7 @@ class PostService(
 
     fun partialUpdatePost(postId: Int, partialUpdatePostRequest: PartialUpdatePostRequest) {
         val post = postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow { PostNotFoundException(postId) }
-        updateMemoMapper.updatePost(partialUpdatePostRequest, post)
+        updatePostMapper.updatePost(partialUpdatePostRequest, post)
         tagService.updateTagsIfPresent(post, partialUpdatePostRequest.tags)
         thumbnailService.updateThumbnail(post, partialUpdatePostRequest.thumbnail)
     }
