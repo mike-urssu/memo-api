@@ -18,6 +18,7 @@ class TagService(
 ) {
     fun createTags(post: Post, names: List<String>) {
         val tagsToSave = names.stream()
+            .distinct()
             .filter { name -> !tagRepository.existsByName(name) }
             .map { name -> Tag(name = name) }
             .collect(Collectors.toList())
@@ -28,13 +29,15 @@ class TagService(
             post.postTags.add(postTag)
         }
 
-//        names.forEach { name ->
-//            val tag = tagRepository.findByName(name)
-//                .orElseGet { tagRepository.save(Tag(name = name)) }
-//            val postTag = postTagRepository.save(PostTag(post = post, tag = tag))
-//            post.postTags.add(postTag)
-//            tag.postTags.add(postTag)
-//        }
+//        names.stream()
+//            .distinct()
+//            .forEach { name ->
+//                val tag = tagRepository.findByName(name)
+//                    .orElseGet { tagRepository.save(Tag(name = name)) }
+//                val postTag = postTagRepository.save(PostTag(post = post, tag = tag))
+//                post.postTags.add(postTag)
+//                tag.postTags.add(postTag)
+//            }
     }
 
     fun updateTagsIfPresent(post: Post, tagsFromRequest: List<String>?) {

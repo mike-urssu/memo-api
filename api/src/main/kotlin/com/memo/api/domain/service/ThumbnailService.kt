@@ -2,6 +2,7 @@ package com.memo.api.domain.service
 
 import com.memo.api.domain.exception.CannotViewImageException
 import com.memo.api.domain.exception.ImageNotFoundException
+import com.memo.api.domain.exception.InvalidFileTypeException
 import com.memo.api.domain.model.entity.Post
 import com.memo.api.domain.model.entity.Thumbnail
 import com.memo.api.domain.model.repository.ThumbnailRepository
@@ -14,12 +15,14 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.util.*
+import javax.servlet.ServletContext
 import javax.transaction.Transactional
 
 @Service
 @Transactional
 class ThumbnailService(
-    private val thumbnailRepository: ThumbnailRepository
+    private val thumbnailRepository: ThumbnailRepository,
+    private val servletContext: ServletContext
 ) {
     @Value("\${application.upload-path}")
     lateinit var uploadPath: String
@@ -29,6 +32,10 @@ class ThumbnailService(
             return
 
         val filename = imagesFromRequest.originalFilename!!
+        val mimeType = servletContext.getMimeType(filename)
+        if (!mimeType.startsWith("image/"))
+            throw InvalidFileTypeException(mimeType)
+
         val savedName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(filename)
         imagesFromRequest.transferTo(File(File(uploadPath).absolutePath, savedName))
 
