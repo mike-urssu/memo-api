@@ -14,7 +14,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
-import java.util.*
+import java.util.UUID
 import javax.servlet.ServletContext
 import javax.transaction.Transactional
 
