@@ -19,25 +19,22 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("mysql:mysql-connector-java")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     implementation("io.github.microutils:kotlin-logging:2.1.21")
-    implementation("commons-io:commons-io:2.11.0")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-
-    implementation("org.mapstruct:mapstruct:1.4.2.Final")
-    kapt("org.mapstruct:mapstruct-processor:1.4.2.Final")
-
-    implementation("org.springframework.boot:spring-boot-starter-aop")
-
     implementation("io.springfox:springfox-boot-starter:3.0.0")
+    implementation("commons-io:commons-io:2.11.0")
+    kapt("org.mapstruct:mapstruct-processor:1.4.2.Final")
+    implementation("org.mapstruct:mapstruct:1.4.2.Final")
 }
 
 tasks.withType<KotlinCompile> {
