@@ -35,6 +35,8 @@ dependencies {
     kapt("org.mapstruct:mapstruct-processor:1.4.2.Final")
 
     implementation("org.springframework.boot:spring-boot-starter-aop")
+
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
 }
 
 tasks.withType<KotlinCompile> {
