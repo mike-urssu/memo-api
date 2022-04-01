@@ -26,14 +26,24 @@ open class TagServiceBase {
     private val postContent: String = "test"
 
     val namesWithoutDuplication = arrayListOf("tag1", "tag2", "tag3")
+    val namesWithDuplication = arrayListOf("tag1", "tag1", "tag1", "tag2", "tag3")
 
     fun getMockPost() = Post(id = postId, title = postTitle, body = postContent)
 
-    fun getMockTagsWithoutDuplication() = namesWithoutDuplication.mapIndexed { index, name ->
+    fun getMockTagsWithoutDuplicatedName() = namesWithoutDuplication.mapIndexed { index, name ->
         Tag(
             id = index + 1,
             name = name,
             postTags = mutableListOf()
         )
     }
+
+    fun getMockTagsByDuplicatedNames() = namesWithDuplication.distinct()
+        .mapIndexed { index, name ->
+            Tag(
+                id = index + 1,
+                name = name,
+                postTags = mutableListOf()
+            )
+        }
 }
