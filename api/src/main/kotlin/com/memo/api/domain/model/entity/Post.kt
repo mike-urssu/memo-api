@@ -48,7 +48,7 @@ data class Post(
     var deletedAt: LocalDateTime? = null,
 
     @field:OneToMany(mappedBy = "post")
-    var postTags: MutableList<PostTag> = mutableListOf(),
+    var postTags: MutableList<PostTag> = mutableListOf()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

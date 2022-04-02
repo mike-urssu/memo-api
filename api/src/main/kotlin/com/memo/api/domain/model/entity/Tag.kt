@@ -34,6 +34,6 @@ data class Tag(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id = $id , name = $name )"
+        return this::class.simpleName + "(name = $name )"
     }
 }
