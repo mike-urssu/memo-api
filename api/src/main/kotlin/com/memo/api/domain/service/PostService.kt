@@ -35,40 +35,40 @@ class PostService(
     @Transactional(readOnly = true)
     fun getPosts(pageable: PageRequest, keyword: String?, tag: String?): Page<GetPostsDto> {
         return (
-            if (keyword != null)
-                postRepository.findAllByIsDeletedIsFalseAndTitleContainingOrBodyContaining(
-                    keyword,
-                    keyword,
-                    pageable
-                )
-            else if (tag == null)
-                postRepository.findAllByIsDeletedIsFalse(pageable)
-            else
-                postTagRepository.findAllByTag_NameContaining(tag, pageable)
-                    .map { postTag -> postTag.post }
-            ).map { GetPostsDto(it) }
+                if (keyword != null)
+                    postRepository.findAllByIsDeletedIsFalseAndTitleContainingOrBodyContaining(
+                        keyword,
+                        keyword,
+                        pageable
+                    )
+                else if (tag == null)
+                    postRepository.findAllByIsDeletedIsFalse(pageable)
+                else
+                    postTagRepository.findAllByTag_NameContaining(tag, pageable)
+                        .map { postTag -> postTag.post }
+                ).map { GetPostsDto(it) }
     }
 
     @Transactional(readOnly = true)
-    fun getPost(postId: Int) =
-        postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow { PostNotFoundException(postId) }.toGetPostDto()
+    fun getPost(clientId: String) =
+        postRepository.findByClientIdAndIsDeletedIsFalse(clientId).orElseThrow { PostNotFoundException(clientId) }.toGetPostDto()
 
-    fun updatePost(postId: Int, updatePostRequest: CreateOrUpdatePostRequest) {
-        val post = postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow { PostNotFoundException(postId) }
+    fun updatePost(clientId: String, updatePostRequest: CreateOrUpdatePostRequest) {
+        val post = postRepository.findByClientIdAndIsDeletedIsFalse(clientId).orElseThrow { PostNotFoundException(clientId) }
         post.update(updatePostRequest)
         tagService.updateTagsIfPresent(post, updatePostRequest.tags)
         thumbnailService.updateThumbnail(post, updatePostRequest.thumbnail)
     }
 
-    fun partialUpdatePost(postId: Int, partialUpdatePostRequest: PartialUpdatePostRequest) {
-        val post = postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow { PostNotFoundException(postId) }
+    fun partialUpdatePost(clientId: String, partialUpdatePostRequest: PartialUpdatePostRequest) {
+        val post = postRepository.findByClientIdAndIsDeletedIsFalse(clientId).orElseThrow { PostNotFoundException(clientId) }
         updatePostMapper.updatePost(partialUpdatePostRequest, post)
         tagService.updateTagsIfPresent(post, partialUpdatePostRequest.tags)
         thumbnailService.updateThumbnail(post, partialUpdatePostRequest.thumbnail)
     }
 
-    fun deletePost(postId: Int) {
-        val post = postRepository.findByIdAndIsDeletedIsFalse(postId).orElseThrow { PostNotFoundException(postId) }
+    fun deletePost(clientId: String) {
+        val post = postRepository.findByClientIdAndIsDeletedIsFalse(clientId).orElseThrow { PostNotFoundException(clientId) }
         post.delete()
     }
 

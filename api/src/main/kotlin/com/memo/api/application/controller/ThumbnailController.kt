@@ -19,6 +19,6 @@ class ThumbnailController(
     @GetMapping("/{imageId}", produces = [MediaType.IMAGE_JPEG_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun viewImage(
-        @PathVariable imageId: Int
+        @PathVariable imageId: String
     ) = thumbnailService.viewImage(imageId)
 }
