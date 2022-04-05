@@ -2,6 +2,7 @@ package com.memo.api.domain.model.entity
 
 import com.memo.api.application.request.CreateOrUpdatePostRequest
 import com.memo.api.domain.model.dto.GetPostDto
+import com.memo.api.domain.util.RNG
 import org.hibernate.Hibernate
 import org.hibernate.annotations.DynamicUpdate
 import org.hibernate.annotations.UpdateTimestamp
@@ -23,6 +24,9 @@ data class Post(
     @field:Id
     @field:GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
+
+    @field:Column(nullable = false, columnDefinition = "CHAR(32)")
+    val clientId: String = RNG.generateKey(),
 
     @field:Column(nullable = false, columnDefinition = "VARCHAR(100)")
     var title: String,

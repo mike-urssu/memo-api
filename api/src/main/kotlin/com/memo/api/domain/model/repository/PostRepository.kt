@@ -18,7 +18,7 @@ interface PostRepository : JpaRepository<Post, Int> {
         pageable: Pageable
     ): Page<Post>
 
-    fun findByIdAndIsDeletedIsFalse(memoId: Int): Optional<Post>
+    fun findByClientIdAndIsDeletedIsFalse(clientId: String): Optional<Post>
 
     fun findByDeletedAtBefore(time: LocalDateTime): List<Post>
 }

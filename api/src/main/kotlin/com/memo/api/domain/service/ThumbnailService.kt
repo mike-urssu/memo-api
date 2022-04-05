@@ -34,7 +34,7 @@ class ThumbnailService(
         val filename = imagesFromRequest.originalFilename!!
         val mimeType = servletContext.getMimeType(filename)
         if (!mimeType.startsWith("image/"))
-            throw InvalidFileTypeException(mimeType)
+            throw InvalidFileTypeException(mimeType, filename)
 
         val savedName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(filename)
         imagesFromRequest.transferTo(File(File(uploadPath).absolutePath, savedName))
@@ -59,12 +59,12 @@ class ThumbnailService(
         }
     }
 
-    fun viewImage(imageId: Int): ByteArray {
-        val image = thumbnailRepository.findById(imageId).orElseThrow { ImageNotFoundException(imageId) }
-        return viewImage(uploadPath + File.separator + image.savedName)
+    fun viewImage(clientId: String): ByteArray {
+        val image = thumbnailRepository.findByClientId(clientId).orElseThrow { ImageNotFoundException(clientId) }
+        return readImageBytes(uploadPath + File.separator + image.savedName)
     }
 
-    private fun viewImage(fileName: String): ByteArray {
+    private fun readImageBytes(fileName: String): ByteArray {
         try {
             FileInputStream(fileName).use { inputStream ->
                 ByteArrayOutputStream().use { outputStream ->

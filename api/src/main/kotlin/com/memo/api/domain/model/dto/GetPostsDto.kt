@@ -6,7 +6,7 @@ import java.util.stream.Collectors
 class GetPostsDto(
     post: Post
 ) {
-    val postId = post.id!!
+    val postId = post.clientId
     val title = post.title
     val body = post.body
     val tags = post.postTags.stream().map {

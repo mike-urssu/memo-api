@@ -52,14 +52,14 @@ class PostController(
     @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     fun getPost(
-        @PathVariable postId: Int
+        @PathVariable postId: String
     ) = GetPostResponse(postService.getPost(postId))
 
     @ApiOperation("특정 velog 수정하기")
     @PutMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     fun updatePost(
-        @PathVariable postId: Int,
+        @PathVariable postId: String,
         @Valid @ModelAttribute updatePostRequest: CreateOrUpdatePostRequest
     ) = postService.updatePost(postId, updatePostRequest)
 
@@ -67,7 +67,7 @@ class PostController(
     @PatchMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     fun partialUpdatePost(
-        @PathVariable postId: Int,
+        @PathVariable postId: String,
         @Valid @ModelAttribute partialUpdatePostRequest: PartialUpdatePostRequest
     ) = postService.partialUpdatePost(postId, partialUpdatePostRequest)
 
@@ -75,7 +75,7 @@ class PostController(
     @DeleteMapping("/{postId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deletePost(
-        @PathVariable postId: Int
+        @PathVariable postId: String
     ) = postService.deletePost(postId)
 
     @ApiOperation("특정 velog 삭제하기")
